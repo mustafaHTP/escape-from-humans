@@ -20,9 +20,7 @@ public class PoliceSounder : MonoBehaviour
         float distance = Vector3.Distance(_rocket.transform.position, transform.position);
         float volume = 1f - Mathf.Clamp01(distance / _maxDistanceToEmitSound);
         _audioSource.volume = volume * _initialVolume;
-        Debug.Log("Police Volum: " + _audioSource.volume);
-        Debug.Log("Distance: " + distance);
-        Debug.Log("Volum: " + volume);
+
         if (!_audioSource.isPlaying)
             _audioSource.Play();
 
