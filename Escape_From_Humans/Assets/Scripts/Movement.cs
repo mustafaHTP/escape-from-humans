@@ -1,32 +1,51 @@
+using System.Numerics;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Vector3 = UnityEngine.Vector3;
 
 public class Movement : MonoBehaviour
 {
-    public bool IsRocketRightBoostDamaged;
-    public bool IsRocketLeftBoostDamaged;
+    [HideInInspector] public bool IsRocketRightBoostDamaged;
+    [HideInInspector] public bool IsRocketLeftBoostDamaged;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip _rocketBoostClip;
+
+    [Header("Speed And Boost")]
     [SerializeField] float _rotationSpeed;
     [SerializeField] float _boostAmount;
-    [SerializeField] AudioClip _rocketBoostClip;
+
+    [Header("Particles")]
     [SerializeField] ParticleSystem _rocketBoostParticle;
     [SerializeField] ParticleSystem _rocketLeftBoostParticle;
     [SerializeField] ParticleSystem _rocketRightBoostParticle;
 
+    [Header("Input Actions")]
+    [SerializeField] InputAction _boostInput;
+    [SerializeField] InputAction _rotateInput;
+
     Rigidbody _rigidbody;
     AudioSource _audioSource;
+    private void OnEnable()
+    {
+        _boostInput.Enable();
+        _rotateInput.Enable();
+    }
 
-    // Start is called before the first frame update
+    private void OnDisable()
+    {
+        _boostInput.Disable();
+        _rotateInput.Disable();
+    }
+
     void Start()
     {
-        //IsRocketRightBoostDamaged = false;
-        //IsRocketLeftBoostDamaged = false;
         _audioSource = GetComponent<AudioSource>();
         _boostAmount = 1000f;
         _rotationSpeed = 100f;
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         ProcessInput();
@@ -40,7 +59,7 @@ public class Movement : MonoBehaviour
 
     void ProcessBoost()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (_boostInput.IsPressed())
         {
             StartBoost();
 
@@ -69,11 +88,14 @@ public class Movement : MonoBehaviour
 
     void ProcessRotation()
     {
-        if (Input.GetKey(KeyCode.LeftArrow) && !IsRocketLeftBoostDamaged)
+        float rotateInput = _rotateInput.ReadValue<float>();
+        int rotateDirection = rotateInput.CompareTo(0f);
+        Debug.Log("input: " + rotateInput + " direction: " + rotateDirection);
+        if (rotateDirection < 0 && !IsRocketLeftBoostDamaged)
         {
             RotateLeft();
         }
-        else if (Input.GetKey(KeyCode.RightArrow) && !IsRocketRightBoostDamaged)
+        else if (rotateDirection > 0 && !IsRocketRightBoostDamaged)
         {
             RotateRight();
         }
