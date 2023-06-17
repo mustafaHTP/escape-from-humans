@@ -61,21 +61,35 @@ public class CollisionHandler : MonoBehaviour
         for (int i = 0; i < other.contactCount; ++i)
         {
             string objectName = other.GetContact(i).thisCollider.gameObject.name;
-            switch (objectName)
+            string hitObjectName = other.gameObject.tag;
+            if(objectName.CompareTo("LeftRocketBooster") == 0 
+                && !hitObjectName.Equals("Friendly") && !hitObjectName.Equals("Finish"))
             {
-                case "LeftRocketBooster":
                     Debug.Log("Left booster collision...");
                     isSideBoosterCollision = true;
                     _movement.IsRocketLeftBoostDamaged = true;
-                    break;
-                case "RightRocketBooster":
-                    Debug.Log("Right booster collision...");
-                    isSideBoosterCollision = true;
-                    _movement.IsRocketRightBoostDamaged = true;
-                    break;
-                default:
-                    break;
+
             }
+            else if(objectName.CompareTo("RightRocketBooster") == 0
+                && !hitObjectName.Equals("Friendly") && !hitObjectName.Equals("Finish"))
+            {
+                Debug.Log("Right booster collision...");
+                isSideBoosterCollision = true;
+                _movement.IsRocketRightBoostDamaged = true;
+                break;
+            }
+            //switch (objectName)
+            //{
+            //    case "LeftRocketBooster":
+            //        break;
+            //    case "RightRocketBooster":
+            //        Debug.Log("Right booster collision...");
+            //        isSideBoosterCollision = true;
+            //        _movement.IsRocketRightBoostDamaged = true;
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
         return isSideBoosterCollision;
     }
