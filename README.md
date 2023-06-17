@@ -15,9 +15,9 @@ You can also watch the gameplay [here](https://youtu.be/XX40I8pAwGE).
 
 ## Controls
 
-Rotate the rocket - Left arrow, Right arrow
+Rotate the rocket - **Left arrow**, **Right arrow**, **A**,**D**, **Gamepad/Xbox Controller Left Stick**
 
-Boost - Space
+Boost - **Space**, **Gamepad - Button South**, **Xbox Controller - A**
 
 ### Debug Keys
 
@@ -32,6 +32,25 @@ C → Disable Collision
 ## Screenshots
 
 ![ss_1](docs/img/1.png)
+
+---
+
+![ss_6](docs/img/6.png)
+
+---
+
 ![ss_2](docs/img/2.png)
+
+---
+
+![ss_7](docs/img/7.png)
+
+---
+
+![ss_5](docs/img/5.png)
+
+---
 ![ss_3](docs/img/3.png)
+
+---
 ![ss_4](docs/img/4.png)
