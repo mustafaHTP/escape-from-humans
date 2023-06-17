@@ -13,6 +13,7 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] ParticleSystem _rocketLeftBoostParticle;
     [SerializeField] ParticleSystem _rocketRightBoostParticle;
 
+    Timer _timer;
     AudioSource _audioSource;
     int _currentSceneIndex;
     Movement _movement;
@@ -21,6 +22,12 @@ public class CollisionHandler : MonoBehaviour
 
     private void Start()
     {
+        _timer =
+        GameObject.Find("Main Camera").GetComponentInChildren<Timer>();
+        if (_timer == null)
+        {
+            Debug.Log("timer not found...");
+        }
         _isCollisionEnabled = true;
         _audioSource = GetComponent<AudioSource>();
         _movement = GetComponent<Movement>();
@@ -62,15 +69,15 @@ public class CollisionHandler : MonoBehaviour
         {
             string objectName = other.GetContact(i).thisCollider.gameObject.name;
             string hitObjectName = other.gameObject.tag;
-            if(objectName.CompareTo("LeftRocketBooster") == 0 
+            if (objectName.CompareTo("LeftRocketBooster") == 0
                 && !hitObjectName.Equals("Friendly") && !hitObjectName.Equals("Finish"))
             {
-                    Debug.Log("Left booster collision...");
-                    isSideBoosterCollision = true;
-                    _movement.IsRocketLeftBoostDamaged = true;
+                Debug.Log("Left booster collision...");
+                isSideBoosterCollision = true;
+                _movement.IsRocketLeftBoostDamaged = true;
 
             }
-            else if(objectName.CompareTo("RightRocketBooster") == 0
+            else if (objectName.CompareTo("RightRocketBooster") == 0
                 && !hitObjectName.Equals("Friendly") && !hitObjectName.Equals("Finish"))
             {
                 Debug.Log("Right booster collision...");
@@ -192,6 +199,7 @@ public class CollisionHandler : MonoBehaviour
     private void StartSuccessSequence()
     {
         _isTransitioning = true;
+        _timer.StopTimer();
         Invoke("LoadNextLevel", _delayAmount);
         // Audio
         _audioSource.Stop();
@@ -206,6 +214,7 @@ public class CollisionHandler : MonoBehaviour
     private void StartCrashSequence()
     {
         _isTransitioning = true;
+        _timer.StopTimer();
         Invoke("ReloadLevel", _delayAmount);
         // Audio
         _audioSource.Stop();
@@ -218,7 +227,7 @@ public class CollisionHandler : MonoBehaviour
     }
 
 
-    private void LoadNextLevel()
+    public void LoadNextLevel()
     {
         int nextSceneIndex = _currentSceneIndex + 1;
         if (nextSceneIndex != SceneManager.sceneCountInBuildSettings)
@@ -226,10 +235,12 @@ public class CollisionHandler : MonoBehaviour
             ++_currentSceneIndex;
         }
         SceneManager.LoadScene(_currentSceneIndex);
+        _timer.ResetTimer();
     }
 
-    private void ReloadLevel()
+    public void ReloadLevel()
     {
         SceneManager.LoadScene(_currentSceneIndex);
+        _timer.ResetTimer();
     }
 }
